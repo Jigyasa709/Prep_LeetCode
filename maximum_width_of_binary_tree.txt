@@ -1,0 +1,42 @@
+ int widthOfBinaryTree(TreeNode* root) {
+        queue <pair<TreeNode*,int>> q;
+        q.push({root,0});
+        
+        int max_diff = 0;
+
+        while(!q.empty())
+        {
+            int x = q.size();
+            int minLabel = q.front().second;
+            int maxLabel;
+
+            while(x--)
+            {
+                TreeNode *node = q.front().first;
+                long long int label = q.front().second;
+                
+                cout<<label<<endl;
+
+                label = label - minLabel;
+
+                q.pop();
+                
+                if(x==0)
+                {
+                    maxLabel = label;
+                }
+                if(node->left!=NULL)
+                {
+                    q.push({node->left,2*label+1});
+                }  
+
+                if(node->right!=NULL)
+                {
+                    q.push({node->right,2*label+2});
+                }      
+            }
+
+            max_diff = max(max_diff,maxLabel);
+        }
+        return max_diff + 1;
+    }
