@@ -1,0 +1,25 @@
+ unordered_map <long,int> umap;
+    int ans =0;
+    void solver(TreeNode*root,long sum,int targetSum)
+    {
+       if(root!=NULL)
+       {
+          sum += root->val;
+
+          if(umap.find(sum-targetSum)!=umap.end())
+          {
+             ans += umap[sum-targetSum];
+          }
+
+          umap[sum]++;
+          solver(root->left,sum,targetSum);
+          solver(root->right,sum,targetSum);
+          umap[sum]--;
+       }
+       return;
+    }
+    int pathSum(TreeNode* root, int targetSum) {
+       umap[0]++;
+       solver(root,0,targetSum); 
+       return ans;
+    }
