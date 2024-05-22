@@ -1,0 +1,28 @@
+int dfs(vector<bool> &vis,vector<vector<int>> &tree,int source,vector<bool>& hasApple)
+    {  
+        vis[source] = true;
+        int cost =0;
+
+       for(int nbr: tree[source])
+       {  
+         if(!vis[nbr])
+         {  cout<<nbr<<endl;
+            cost += dfs(vis,tree,nbr,hasApple);
+         }
+        }
+            if(source!=0 &&(cost>0 || hasApple[source]))
+            { return cost+2;
+            }
+            return cost;
+    }
+    int minTime(int n, vector<vector<int>>& edges, vector<bool>& hasApple) {
+       vector<vector<int>> tree(n);
+
+       for(int i=0;i<edges.size();i++)
+       {
+          tree[edges[i][0]].push_back(edges[i][1]);
+          tree[edges[i][1]].push_back(edges[i][0]);
+       } 
+       vector<bool> vis(n,false);
+       return dfs(vis,tree,0,hasApple);
+    }
