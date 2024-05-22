@@ -1,0 +1,43 @@
+TreeNode* replaceValueInTree(TreeNode* root) {
+        queue <pair<TreeNode*,int>> q;
+        q.push({root,root->val});
+        
+        int PrelevelSum =root->val;
+
+        while(!q.empty())
+        {
+            int x = q.size();
+            int currlevelSum = 0;
+            while(x--)
+            {
+                TreeNode *node = q.front().first;
+                int sum = q.front().second;
+                
+                q.pop();
+
+                node->val = PrelevelSum - sum;
+                
+                int childSum = 0;
+                if(node->left!=NULL)
+                {
+                   childSum += node->left->val; 
+                   currlevelSum += node->left->val;                  
+                }
+                if(node->right != NULL)
+                {
+                    childSum += node->right->val;
+                    currlevelSum += node->right->val;
+                }
+                  if(node->left!=NULL)
+                {
+                   q.push({node->left,childSum});                   
+                }
+                if(node->right != NULL)
+                {
+                    q.push({node->right,childSum});
+                }
+            }
+            PrelevelSum = currlevelSum;
+        }
+        return root;
+    }
