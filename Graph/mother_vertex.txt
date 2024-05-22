@@ -1,0 +1,41 @@
+ void dfs(vector <bool>&vis,int s,vector <int> adj[])
+    {
+        vis[s] = true;
+        
+        for(int nbr : adj[s])
+        {
+            if(!vis[nbr])
+            {
+                dfs(vis,nbr,adj);
+            }
+        }
+    }
+	int findMotherVertex(int V, vector<int>adj[])
+	{
+	    vector <bool>vis(V,false);
+	    
+	    int ans = -1;
+	    
+	    for(int i=0;i<V;i++)
+	    {
+	        if(!vis[i])
+	        {
+	            dfs(vis,i,adj);
+	            ans = i;
+	        }
+	    }
+	    
+	    for(int i=0;i<V;i++)
+	    {
+	        vis[i] = false;
+	    }
+	    
+	    dfs(vis,ans,adj);
+	    
+	    for(int i=0;i<V;i++)
+	    {
+	        if(!vis[i])
+	        return -1;
+	    }
+	    return ans;
+	}
