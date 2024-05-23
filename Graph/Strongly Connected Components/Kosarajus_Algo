@@ -1,1 +1,71 @@
-
+void dfs(int i,vector<vector<int>>& adj,vector <bool> &vis,stack<int> &st)
+	{
+	     vis[i] = true;
+	     
+	     for(int nbr: adj[i])
+	     {
+	         if(!vis[nbr])
+	         {
+	             dfs(nbr,adj,vis,st);
+	         }
+	     }
+	     st.push(i);
+	}
+	
+	void dfs2(int v,vector<vector<int>>& adj,vector <bool> &vis)
+	{
+	    vis[v] = true;
+	    
+	    for(int nbr: adj[v])
+	     {
+	         if(!vis[nbr])
+	         {
+	             dfs2(nbr,adj,vis);
+	         }
+	     }
+	}
+    int kosaraju(int V, vector<vector<int>>& adj)
+    {
+        stack <int> st;
+        vector <bool> vis(V,false);
+        
+        for(int i=0;i<V;i++)
+        {
+            if(!vis[i])
+            {
+                dfs(i,adj,vis,st);
+            }
+        }
+        
+        for(int i=0;i<V;i++)
+        {
+            vis[i] = false;
+        }
+        
+        vector<vector<int>> TransposeAdj(V);
+        
+        for(int i=0;i<adj.size();i++)
+        {
+            for(int j: adj[i])
+            {
+                TransposeAdj[j].push_back(i);
+            }
+        }
+        
+        int ans =0;
+        
+        while(!st.empty())
+        {
+           int v = st.top();
+           st.pop();
+           
+           if(!vis[v])
+           {
+               dfs2(v,TransposeAdj,vis);
+               ans++;
+           }
+           
+        }
+        
+        return ans;
+    }
