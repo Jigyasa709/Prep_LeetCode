@@ -1,0 +1,52 @@
+bool isPathExist(int s,int d,vector <int> &vis,vector<vector<int>>& adj)
+	{
+	    if(s==d)
+	    {
+	        return true;
+	    }
+	    vis[s] = true;
+	    
+	    for(int nbr: adj[s])
+	    {
+	        if(!vis[nbr])
+	        {
+	            if(isPathExist(nbr,d,vis,adj))
+	            {
+	                return true;
+	            }
+	        }
+	    }
+	    return false;
+	}
+    int kosaraju(int V, vector<vector<int>>& adj)
+    {   
+        int ans=0;
+        
+        vector <bool> isSCC(V,false);
+        
+        for(int i=0;i<V;i++)
+        {   
+            if(!isSCC[i])
+            {   
+                isSCC[i] = true;
+                //cout<<i<<endl;
+                for(int j = i+1;j<V;j++)
+                {   
+                   
+                    if(!isSCC[j])
+                    {   
+                         vector <int> vis2(V,false);
+                         vector <int> vis3(V,false);
+                         
+                        if(isPathExist(i,j,vis2,adj) && isPathExist(j,i,vis3,adj))
+                        {
+                            isSCC[j] = true;
+                            //cout<<j<<endl;
+                        }
+                    }
+                }
+                ans++;
+            }
+        }
+        return ans;
+    }
