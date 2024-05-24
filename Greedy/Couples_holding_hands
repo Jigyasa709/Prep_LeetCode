@@ -1,0 +1,46 @@
+//first store all the element value and its index ina hashmap
+// iterate to even i index if the row[i] is even then the second element should be row[i]+1 else second would be row[i]-1
+//if second is not as per wish then we need to swap it with the actual second element index and swap is increment by 1
+// swap the elements and store the updated indexes in hashmap also
+
+//this problem can also be solved by dfs can see oin dfs section
+
+int minSwapsCouples(vector<int>& row) {
+       unordered_map <int,int> umap;
+
+       int n = row.size();
+
+       for(int i=0;i<n;i++)
+       {
+         umap[row[i]] = i;
+       } 
+       
+       int total_swap =0;
+
+       for(int i=0;i<n;i=i+2)
+       {
+           int first = row[i];
+           int second;
+
+           if(row[i]%2==0)
+           {
+             second = row[i]+1;
+           }
+           else
+           {
+            second = row[i]-1;
+           }
+
+           if(row[i+1]!= second)
+           {  
+            total_swap++;
+              int temp = row[i+1];
+              row[i+1] = row[umap[second]];
+              row[umap[second]] = temp;
+              
+              umap[temp] = umap[second];
+              umap[second] = i+1;
+           }
+       }
+       return total_swap;
+    }
