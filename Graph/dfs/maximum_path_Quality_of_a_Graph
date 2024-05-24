@@ -1,0 +1,43 @@
+//there can be multiple paths which get back to 0 visiting multiple nodes any number of times
+//to include value of a node only once we are making vector of int that is count of a node is visiting and when it is visited for first time then only add the value to
+//the current path value
+//and dfs will terminate when the path time is greater than maxTime
+ 
+ int maxQuality = 0;
+    void dfs(int s,vector <pair<int,int>> adj[],vector <int>&vis,int &maxTime,vector<int>&values,int currTime,int currQuality)
+    {   
+        if(currTime> maxTime)
+        return;
+        
+        if(vis[s]==0)
+        currQuality += values[s];
+
+        vis[s]++;
+        
+        if(s==0)
+        maxQuality = max(maxQuality,currQuality);
+
+        for(pair <int,int> nbr: adj[s])
+        {       
+         dfs(nbr.first,adj,vis,maxTime,values,currTime+nbr.second,currQuality); 
+        }
+        vis[s]--;
+    }
+    int maximalPathQuality(vector<int>& values, vector<vector<int>>& edges, int maxTime) {
+        
+        int n = values.size();
+
+        vector <pair<int,int>> adj[n];
+
+        for(vector <int> edge: edges)
+        {
+            adj[edge[0]].push_back({edge[1],edge[2]});
+            adj[edge[1]].push_back({edge[0],edge[2]});
+        }
+        
+        vector <int> vis(n,0);
+
+        dfs(0,adj,vis,maxTime,values,0,0);
+            
+        return maxQuality;
+    }
