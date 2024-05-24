@@ -1,0 +1,52 @@
+int dfs(int i,vector <int> adj[],vector <bool> &vis)
+{
+    vis[i] = true;
+    
+    int ans =1;
+    for(int nbr : adj[i])
+    {
+        if(!vis[nbr])
+        {
+           ans += dfs(nbr,adj,vis);
+        }
+    }
+    return ans;
+}
+int journeyToMoon(int n, vector<vector<int>> astronaut) {
+     long long int ans =  0;
+     
+     vector <int> adj[n];
+     
+     for(vector<int> v : astronaut)
+     {
+         adj[v[0]].push_back(v[1]);
+         adj[v[1]].push_back(v[0]);
+     }    
+     
+     vector <bool> vis(n,false);
+     
+     vector <int> count;
+     
+     for(int i=0;i<n;i++)
+     {
+         if(!vis[i])
+         {
+             int c = dfs(i,adj,vis);
+             count.push_back(c);
+         }
+     }
+     
+     long sum =0;
+     
+     for(int i=0;i<count.size();i++)
+     {
+         sum += count[i];
+     }
+     
+     for(int i=0;i<count.size();i++)
+     {
+         ans += count[i]*(sum-count[i]);
+         sum -= count[i];
+     }
+     return ans;
+}
