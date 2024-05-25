@@ -1,0 +1,51 @@
+ bool isNextWord(string A,string B)
+    {
+        int count =0;
+
+        for(int i=0;i<A.size();i++)
+        {
+            if(A[i]!= B[i])
+            {
+                count++;
+            }
+        }
+        if(count==1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        queue <pair<string,int>> q;
+
+        q.push({beginWord,1});
+
+        int n = wordList.size();
+
+        vector <bool> vis(n,false);
+
+        while(!q.empty())
+        {
+
+           string word = q.front().first;
+           int level = q.front().second; 
+           
+           q.pop();
+           
+           if(word == endWord)
+           {
+            return level;
+           }
+           for(int i=0;i<wordList.size();i++)
+           {
+                if(!vis[i] && isNextWord(word,wordList[i]))
+                {   vis[i] = true;
+                    q.push({wordList[i],level+1});
+                }
+           }
+        }
+        return 0;
+    }
