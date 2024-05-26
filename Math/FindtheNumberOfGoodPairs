@@ -1,0 +1,39 @@
+//https://leetcode.com/problems/find-the-number-of-good-pairs-ii/description/
+
+ long long numberOfPairs(vector<int>& nums1, vector<int>& nums2, int k) {
+        int n = nums1.size();
+        int m = nums2.size();
+      
+        for(int i=0;i<m;i++)
+        {
+            nums2[i] = k*nums2[i];
+        }
+        
+        unordered_map <int,int> freq;
+
+        for(int i=0;i<m;i++)
+        {
+            freq[nums2[i]]++;
+        }
+
+        long long ans =0;
+
+        for(int i=0;i<n;i++)
+        {
+            int sq = sqrt(nums1[i]);
+
+            for(int j=1;j<=sq;j++)
+            {
+                if(nums1[i]%j!=0)
+                continue;
+            
+                ans += freq[j];
+
+                if(nums1[i]/j != j)
+                {
+                    ans += freq[nums1[i]/j];
+                }
+            }
+        }
+        return ans;
+    }
