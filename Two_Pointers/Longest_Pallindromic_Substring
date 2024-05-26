@@ -1,1 +1,47 @@
+//for every char traverse by increasing one left and right position until char are equal and record the largest substring
+//In case of consecutive same char start from i,i+1 
 
+string solver(int i,int j,string s,int n)
+    {   int length =j-i;
+         while(i>=0 && j<n && s[i]==s[j])
+         {
+            length++;
+            i--;
+            j++;
+         }
+         i++;
+         j--;
+         return s.substr(i,j-i+1);
+    }
+    string longestPalindrome(string s) {
+        int n = s.size();
+        
+        int largest =0;
+        string ans;
+
+        for(int i=0;i<n;i++)
+        {   
+            string str;
+
+            str = solver(i,i,s,n);
+
+            if(str.size()>largest)
+            {
+                largest = str.size();
+                ans = str;
+            }
+
+            
+            if(i < n-1 && s[i]==s[i+1])
+            {
+                 str = solver(i,i+1,s,n);
+
+                 if(str.size()>largest)
+               {
+                largest = str.size();
+                ans = str;
+               }
+            }    
+        }
+        return ans;
+    }
