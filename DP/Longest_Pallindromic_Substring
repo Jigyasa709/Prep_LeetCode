@@ -1,0 +1,44 @@
+//DP approach 
+//make a 2D array to mark 1 or 0 if the interval is pallindrome or not
+//first mark all DP[i][j] = 1
+//then check for 2 size substrings if they are pallindrome mark that interval as 1 else 0
+//then check for all intervals as if(s[i]==s[j]) then if T[i-1][j+1] == 1 then T[i][j] =1 else T[i][j] = 0
+string longestPalindrome(string s) {
+         int n = s.size();
+      int result=1;
+      
+      string longest = s.substr(0,1);
+
+      vector<vector<int>>dp(n,vector<int>(n,0));
+
+      for(int i=0;i<n;i++)
+      { dp[i][i] = 1;
+      }
+
+      for(int i=0;i<n-1;i++)
+      {   
+        if(s[i] == s[i+1])
+          {dp[i][i+1] = 1; 
+            if(result<2)
+            {
+                result =2;
+                longest = s.substr(i,2);
+            }
+          }
+      }
+
+      for(int i=n-2;i>=0;i--)
+      {
+        for(int j= i+1;j<=n-1;j++)
+        {
+            if(s[i]==s[j] && dp[i+1][j-1] == 1)
+            { dp[i][j] =1;
+               if(result<j-i+1)
+               { result = j-i+1;
+                 longest = s.substr(i,j-i+1);
+               }
+            }
+        }
+      }
+      return longest;
+    }
