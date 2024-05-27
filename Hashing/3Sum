@@ -1,0 +1,42 @@
+
+vector<vector<int>> threeSum(vector<int>& nums) {
+        unordered_map <int,int> umap;
+        
+        int n = nums.size();
+
+        sort(nums.begin(),nums.end());
+
+        for(int i=0;i<nums.size();i++)
+        {
+            umap[nums[i]] = i;
+        }
+        
+        vector<vector<int>> ans;
+
+        for(int i=0;i<n;i++)
+        {   if(nums[i]>0)
+             break;
+              if(i>0 && nums[i]==nums[i-1])
+            {  
+                continue;
+            }
+            //cout<<i<<endl;
+            for(int j=i+1;j<n;j++)
+            {   
+                if(j>i+1 && nums[j]==nums[j-1])
+                {
+                    continue;
+                }
+                cout<<i<<" "<<j<<endl;
+                int sum = nums[i] + nums[j];
+
+                sum = (-1)*sum;
+               if(umap.find(sum)!=umap.end() && umap[sum]>j)
+               {
+                   vector<int> v ={nums[i],nums[j],sum};
+                   ans.push_back(v);
+               }
+            }
+        }
+        return ans;
+    }
