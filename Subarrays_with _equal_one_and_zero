@@ -1,0 +1,40 @@
+ //Function to count subarrays with 1s and 0s.
+//take 0 as -1 and 1 as 1 and add up the values one by one into sum
+//maintain a hashmap of sum count
+//iterate the map and freq*(freq-1)/2 gives all the pairs formed by same freq values
+
+    long long int countSubarrWithEqualZeroAndOne(int arr[], int n)
+    {
+        unordered_map <int,int> freq;
+        
+        long long sum =0;
+        
+        long long ans =0;
+        
+        for(int i=0;i<n;i++)
+        {
+            if(arr[i]==1)
+            {
+                sum += 1;
+            }
+            else
+            {
+                sum += -1;
+            }
+            freq[sum]++;
+        }
+        
+        for(auto fr : freq)
+        {
+            if(fr.second>1)
+            {
+                ans += (fr.second*(fr.second-1))/2;
+            }
+        }
+        
+        if(freq.find(0)!= freq.end())
+        {
+            ans += freq[0];
+        }
+        return ans;
+    }
