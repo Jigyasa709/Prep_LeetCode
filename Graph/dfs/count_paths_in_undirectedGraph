@@ -1,0 +1,85 @@
+// C++ program to count total number of
+// ways to reach destination in a graph
+
+//marks visted to secure from cycle and mark true when a node done after a node done with visiting all its neighbours and when backtracking
+
+#include <iostream>
+using namespace std;
+
+// Utility Function to count total ways
+int countWays(int mtrx[][11], int vrtx,
+			int i, int dest, bool visited[])
+{
+	// Base condition
+	// When reach to the destination
+	if (i == dest) {
+
+		return 1;
+	}
+	int total = 0;
+	for (int j = 0; j < vrtx; j++) {
+		if (mtrx[i][j] == 1 && !visited[j]) {
+
+			// Make vertex visited
+			visited[j] = true;
+
+			// Recursive function, for count ways
+			total += countWays(mtrx, vrtx,
+							j, dest, visited);
+
+			// Backtracking
+			// Make vertex unvisited
+			visited[j] = false;
+		}
+	}
+
+	// Return total ways
+	return total;
+}
+
+// Function to count total ways
+// to reach destination
+int totalWays(int mtrx[][11], int vrtx,
+			int src, int dest)
+{
+	bool visited[vrtx];
+
+	// Loop to make all vertex unvisited,
+	// Initially
+	for (int i = 0; i < vrtx; i++) {
+		visited[i] = false;
+	}
+
+	// Make source visited
+	visited[src] = true;
+
+	return countWays(mtrx, vrtx, src, dest,
+					visited);
+}
+
+int main()
+{
+	int vrtx = 11;
+	int mtrx[11][11] = {
+		{ 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0 },
+		{ 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
+		{ 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0 },
+		{ 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+		{ 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0 },
+		{ 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0 },
+		{ 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0 },
+		{ 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0 },
+		{ 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0 },
+		{ 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0 },
+		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }
+	};
+
+	int src = 3;
+	int dest = 9;
+
+	// Print total ways
+	cout << totalWays(mtrx, vrtx, src - 1,
+					dest - 1);
+
+	return 0;
+}
