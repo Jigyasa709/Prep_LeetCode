@@ -1,0 +1,53 @@
+https://leetcode.com/problems/course-schedule-ii/description/
+//if cycle is detected print empty array if cycle is not there it means DAG then print the topo sorted sequence
+
+bool dfs(int s, vector<int>adj[], stack <int> &st,vector<bool> &vis,vector<bool> &path)
+    {
+        vis[s] = true;
+        path[s] = true;
+
+        for(int nbr: adj[s])
+        {   
+            if(path[nbr])
+            {
+                return false;
+            }
+            else if(!vis[nbr])
+            {
+                if(!dfs(nbr,adj,st,vis,path))
+                return false;
+            }
+        }
+        path[s] = false;
+        st.push(s);
+        return true;
+    }
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        vector <int> ans;
+        stack <int> st;
+        vector <bool> path(numCourses,false);
+        vector<bool> vis(numCourses,false);
+        
+        vector <int> adj[numCourses];
+
+        for(vector <int> course: prerequisites)
+        {
+            adj[course[1]].push_back(course[0]);
+        }
+
+        for(int i=0;i<numCourses;i++)
+        {
+            if(!vis[i])
+            {
+                if(!dfs(i,adj,st,vis,path))
+                return ans;
+            }
+        }
+
+        while(!st.empty())
+        {
+            ans.push_back(st.top());
+            st.pop();
+        }
+        return ans;
+    }
