@@ -1,0 +1,31 @@
+ vector <int> dijkstra(int V, vector<vector<int>> adj[], int S)
+    {
+        priority_queue <pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>> > q;
+        q.push({0,S});
+        
+        vector <int> dist(V,INT_MAX);
+        
+        dist[S] = 0;
+        
+        while(!q.empty())
+        {
+            int dst = q.top().first;
+            int node = q.top().second;
+            
+            q.pop();
+            
+            for(vector <int> v : adj[node])
+            {   
+                int nbr = v[0];
+                int weight = v[1];
+                
+                if(dist[nbr] > dst + weight)
+                {
+                    dist[nbr] = dst + weight;
+                    q.push({dist[nbr],nbr});
+                }
+            }
+        }
+        
+        return dist;
+    }
