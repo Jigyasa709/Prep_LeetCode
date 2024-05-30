@@ -1,0 +1,29 @@
+//mark unvisited when all its neghbour are visited
+int dfs(int s,int d,vector <int> adj[],vector <bool> &vis)
+    {
+        if(s==d)
+        {
+            return 1;
+        }
+        
+        vis[s] = true;
+        
+        int ans =0;
+        
+        for(int nbr: adj[s])
+        {
+            if(!vis[nbr])
+            ans += dfs(nbr,d,adj,vis);
+        }
+        
+        vis[s] = false;
+        
+        return ans;
+    }
+    int countPaths(int V, vector<int> adj[], int source, int destination) {
+        vector <bool> vis(V,false);
+        
+       int ans = dfs(source,destination,adj,vis);
+       
+       return ans;
+    }
