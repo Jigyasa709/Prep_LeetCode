@@ -1,0 +1,42 @@
+https://leetcode.com/problems/course-schedule/description/
+//mark path visited because if any vertex is visited again the same path it mean cycle is there
+
+bool dfs(int s,vector <int> adj[],vector <bool> &vis,vector<bool> &path)
+    {
+        path[s] = true;
+        vis[s] = true;
+        for(int nbr : adj[s])
+        {
+            if(path[nbr])
+            {
+                return false;
+            }
+            else if(!vis[nbr])
+            {
+                if(!dfs(nbr,adj,vis,path))
+                return false;
+            }
+        }
+        path[s] = false;
+        return true;
+    }
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+       vector <bool> vis(numCourses,false);
+       vector <bool> path(numCourses,false);
+       vector <int> adj[numCourses];
+
+       for(vector <int> course : prerequisites)
+       {
+        adj[course[1]].push_back(course[0]);
+       }
+       
+       //vector <int> &path;
+       for(int i=0;i<numCourses;i++)
+       {   
+           if(adj[i].size()>0 && !vis[i])
+           {if(!dfs(i,adj,vis,path))
+            return false;
+           }
+       }
+       return true;
+    }
