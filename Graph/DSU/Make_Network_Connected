@@ -1,0 +1,67 @@
+https://leetcode.com/problems/number-of-operations-to-make-network-connected/description/
+
+//since every vertex pair is having atmost 1 edge between them. to make the network connected join all the comnnected components so no_of_connected_components-1 
+//is the ans. and total_edges will be atleast n-1 so it can always connect all the vertices  
+
+ void make(int i,vector <int> &par,vector <int> &rank)
+    {
+        rank[i] = 1;
+        par[i] = i;
+    }
+
+    int findPar(int a,vector <int> &parent)
+    {
+        if(a== parent[a])
+        return a;
+        return parent[a] = findPar(parent[a],parent);
+    }
+    void Union(int a, int b,vector <int> &parent,vector <int> &rank)
+    {
+        int aPar = findPar(a,parent);
+        int bPar = findPar(b,parent);
+        
+        if(rank[bPar] > rank[aPar])
+        {
+            parent[aPar] = bPar;
+        }
+        else if(rank[bPar] < rank[aPar])
+        {
+            parent[bPar] = aPar;
+        }
+        else
+        {
+            parent[aPar] = bPar;
+            bPar++;
+        }
+
+    }
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        int wires = connections.size();
+        
+        if(wires< n-1) return -1;
+        
+        vector <int> par(n);
+        vector <int> rank(n);
+        
+        for(int i=0;i<n;i++)
+        {
+            make(i,par,rank);
+        }
+        
+        for(vector <int> con : connections)
+        {
+            Union(con[0],con[1],par,rank);
+        }
+        
+        int cnt =0;
+
+        for(int i=0;i<n;i++)
+        {
+            if(par[i]==i)
+            {   
+                cnt++;
+            }        
+        }
+
+        return cnt-1;
+    }
