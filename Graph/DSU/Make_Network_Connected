@@ -1,7 +1,8 @@
 https://leetcode.com/problems/number-of-operations-to-make-network-connected/description/
 
 //since every vertex pair is having atmost 1 edge between them. to make the network connected join all the comnnected components so no_of_connected_components-1 
-//is the ans. and total_edges will be atleast n-1 so it can always connect all the vertices  
+//is the ans. and total_edges will be atleast n-1 so it can always connect all the vertices 
+//used union by rank coz union by size could hold very large value that could not be stored in a int or long long data type
 
  void make(int i,vector <int> &par,vector <int> &rank)
     {
