@@ -1,0 +1,89 @@
+/* https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/description/
+we are creating 2 DSU's one for alice and another for bob and counting the edges which are being included for union */
+
+int find(vector<int> &par,int v)
+    {
+        if(par[v]==v) return v;
+        return par[v] = find(par,par[v]);
+    }
+
+    void Union(vector<int> &Par,int a, int b,vector<int> &size)
+    {
+         a = find(Par,a);
+         b = find(Par,b);
+
+        if(a!=b)
+        {
+            if(size[a] < size[b])
+            {
+                swap(a,b);
+            }
+            Par[b] = a;
+            size[a] += size[b];
+        }
+    }
+    int maxNumEdgesToRemove(int n, vector<vector<int>>& edges) {
+        vector <int> AlicePar(n);  
+        vector <int> BobPar(n);
+
+        vector <int> Alicesize(n,1);
+        vector <int> Bobsize(n,1);
+
+        sort(edges.begin(),edges.end(),greater<vector<int>>());
+
+        int count =0;
+
+        for(int i=0;i<n;i++)
+        {
+            AlicePar[i] = i;
+            BobPar[i] = i;
+        }
+
+        for(auto edge:edges)
+        {   
+            int type = edge[0];
+            int first = edge[1]-1;
+            int sec = edge[2]-1;
+            int Alicefirst = find(AlicePar,first);
+            int Alicesec = find(AlicePar,sec);
+            int Bobfirst = find(BobPar,first);
+            int Bobsec = find(BobPar,sec);
+
+            if(Bobfirst != Bobsec && type==2)
+            {
+                count++;
+                Union(BobPar,first,sec,Bobsize);
+            }
+            else if(Alicefirst != Alicesec && type==1)
+            {
+                count++;
+                Union(AlicePar,first,sec,Alicesize);
+            }
+            else if(Alicefirst != Alicesec && Bobfirst != Bobsec && type==3)
+            {
+                count++;
+                Union(AlicePar,first,sec,Alicesize);
+                Union(BobPar,first,sec,Bobsize);
+            }
+            
+        }
+
+        int cntAlice=0,cntBob=0;
+
+        for(int i=0;i<n;i++)
+        {
+            if(AlicePar[i]==i)
+            {
+                cntAlice++;
+            }
+            if(BobPar[i]==i)
+            {
+                cntBob++;
+            }
+        }
+        
+        if(cntAlice>1 || cntBob>1)
+        return -1;
+
+        return edges.size() - count;
+    }
