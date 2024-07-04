@@ -1,0 +1,20 @@
+/* https://leetcode.com/problems/find-the-maximum-length-of-valid-subsequence-ii/description/
+take the example as LIS */
+
+ int n = nums.size();
+
+        vector<vector<int>>dp(k,vector<int>(n,1));
+
+        int longest =1;
+
+        for(int i=1;i<n;i++)
+        {
+            for(int j=i-1;j>=0;j--)
+            {
+                int t = (nums[i]+nums[j])%k;
+
+               dp[t][i] =  max(dp[t][i],dp[t][j] + 1);
+               longest = max(dp[t][i],longest);
+            }
+        }
+        return longest; 
