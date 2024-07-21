@@ -1,0 +1,89 @@
+// https://leetcode.com/problems/build-a-matrix-with-conditions/description/
+class Solution {
+    boolean dfs(int s,boolean[] vis,ArrayList<Integer> Topo,boolean[] path,ArrayList<ArrayList<Integer>> Graph)
+    {
+        vis[s] = true;
+        path[s] = true;
+        for(int nbr: Graph.get(s))
+        {   
+            if(!vis[nbr])
+            {
+                if(dfs(nbr,vis,Topo,path,Graph))
+                return true;
+            }
+            else 
+            {
+                if(path[nbr])
+                return true;
+            }
+        }
+        Topo.add(s);
+        path[s] = false;
+        return false;
+    }
+    public int[][] buildMatrix(int k, int[][] rowConditions, int[][] colConditions) {
+         int[][] result = new int[k][k];
+
+        boolean[] visRow = new boolean[k+1];
+        boolean[] visCol = new boolean[k+1];
+
+        boolean[] pathRow = new boolean[k+1];
+        boolean[] pathCol = new boolean[k+1];
+
+        ArrayList<ArrayList<Integer> > rowGraph = new ArrayList<ArrayList<Integer> >();
+        ArrayList<ArrayList<Integer> > colGraph = new ArrayList<ArrayList<Integer> >();
+
+        for(int i=0;i<=k;i++)
+        {
+            rowGraph.add(new ArrayList<Integer>());
+            colGraph.add(new ArrayList<Integer>());
+        }
+
+        for(int[] rows: rowConditions)
+        {
+            rowGraph.get(rows[0]).add(rows[1]);
+        }
+
+        for(int[] cols : colConditions)
+        {
+            colGraph.get(cols[0]).add(cols[1]);
+        }
+
+        ArrayList <Integer> rowTopo = new ArrayList();
+        ArrayList <Integer> colTopo = new ArrayList();
+
+        for(int i=1;i<=k;i++)
+        {
+            if(!visRow[i])
+            {
+                if(dfs(i,visRow,rowTopo,pathRow,rowGraph))
+                return new int[0][0];
+            }
+        }
+
+        for(int i=1;i<=k;i++)
+        {
+            if(!visCol[i])
+            {
+                if(dfs(i,visCol,colTopo,pathCol,colGraph))
+                return new int[0][0];
+            }
+        }
+        
+        Collections.reverse(rowTopo);
+        Collections.reverse(colTopo);
+
+        for(int i=0;i<k;i++)
+        {   
+            for(int j=0;j<k;j++)
+            {
+                if(colTopo.get(j).equals(rowTopo.get(i)))
+               {  
+                result[i][j] = colTopo.get(j);
+               }
+            }
+
+        }
+        return result; 
+    }
+}
