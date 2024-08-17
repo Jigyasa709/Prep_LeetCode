@@ -1,0 +1,48 @@
+/* https://leetcode.com/problems/maximum-number-of-points-with-cost/description/
+
+similar to minimmun falling path but since it was taking O(M*N*N) TC we optimized it by taking Max score till that index from left and right side in temporary 
+leftMax and rightMax arrays and at the last calculating max score for current row by adding the point[row][col] + Math.max(leftMax[col],rightMax[col);
+
+public long maxPoints(int[][] points) {
+        int rows = points.length,cols = points[0].length;
+        long[] previousRow = new long[cols];
+
+        for(int col=0;col<cols;col++)
+        {
+            previousRow[col] = points[0][col];
+        }
+
+        for(int row =1; row<rows;row++)
+        {
+           long [] leftMax = new long[cols];
+           long [] rightMax = new long[cols];
+           long [] currentRow = new long[cols];
+
+           leftMax[0] = previousRow[0];
+           for(int col=1;col<cols;col++)
+           {
+             leftMax[col] = Math.max(previousRow[col],leftMax[col-1]-1);
+           } 
+
+           rightMax[cols-1] = previousRow[cols-1];
+           for(int col= cols-2;col>=0;col--)
+           {
+            rightMax[col] = Math.max(rightMax[col+1]-1,previousRow[col]);
+           }
+
+           for(int col=0;col<cols;col++)
+           {
+            currentRow[col] = points[row][col] + Math.max(leftMax[col],rightMax[col]);
+           }
+
+           previousRow = currentRow;
+        }
+
+        long ans=0;
+
+        for(int col=0;col<cols;col++)
+        {
+            ans = Math.max(ans,previousRow[col]);
+        }
+        return ans;
+    }
